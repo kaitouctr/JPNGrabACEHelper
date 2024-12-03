@@ -7,7 +7,7 @@ namespace JPNGrabACEHelper;
 
 internal class Wild
 {
-    public static List<Dictionary<string, uint>> Generator(
+    public static IEnumerable<uint> Generator(
         uint seed,
         uint initialAdvances,
         uint maxAdvances,
@@ -16,7 +16,6 @@ internal class Wild
         PokeRNG pokeRNG = new(seed);
         PokeRNG advRNG = new(0);
         pokeRNG.Next(initialAdvances + delay);
-        List<Dictionary<string, uint>> pids = new((int)maxAdvances + 1);
         for (uint adv = 0; adv <= maxAdvances; adv++)
         {
             advRNG.State = pokeRNG.State;
@@ -27,12 +26,8 @@ internal class Wild
             {
                 pid = MethodPID.Generate(advRNG);
             } while ((pid % 25) != searchNature);
-            Dictionary<string, uint> entry = new Dictionary<string, uint>();
-            entry.Add("Advance", (initialAdvances + adv));
-            entry.Add("PID", pid);
-            pids.Add(entry);
+            yield return pid;
             pokeRNG.Next();
         }
-        return pids;
     }
 }

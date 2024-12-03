@@ -2,8 +2,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
 
 namespace JPNGrabACEHelper;
+
 
 class Program
 {
@@ -18,7 +21,7 @@ class Program
         uint seed = CLIInput.HexNumberInputLoop("Seed");
         uint delay = CLIInput.NumberInputLoop("Delay");
         
-        List<Dictionary<string, uint>> pidGenerator;
+        IEnumerable<uint> pidGenerator;
         switch(encounterType)
         {
             case CLIInput.EncounterType.Static:
@@ -30,16 +33,27 @@ class Program
             default:
                 return;
         }
-        foreach (Dictionary<string, uint> pid in pidGenerator) {
-            Dictionary<MonEntry, List<WordEntry>>? results
-                = Searcher.DetermineCompatibility(tid, sid, pid["PID"], game);
-            if (results == null) {
+        Dictionary<uint, uint> results = [];
+        foreach (
+            (int advance, uint pid) in pidGenerator
+                                       .Select((x, i) => (i, x)))
+        {
+            Dictionary<MonEntry, WordEntry>? searcherResults
+                = Searcher.DetermineCompatibility(tid, sid, pid, game);
+            if (searcherResults == null || !(searcherResults.Count > 0))
+            {
                 continue;
             }
-            if (results.Count == 0) {
-                continue;
-            }
-            Console.WriteLine($"{pid["Advance"]}: {pid["PID"]:X8}");
+            results.Add((initialAdvances + (uint)advance), pid);
         }
+        string output = string.Join("\n", 
+                (
+                 from entry in results
+                 select $"Advance: {entry.Key} | PID: {entry.Value:X8}"
+                )
+            );
+        Console.WriteLine(output);
+        Console.Write("Press any key to close this window…");
+        Console.ReadKey();
     }
 }

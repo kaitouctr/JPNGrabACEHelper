@@ -17,27 +17,17 @@ internal class ResultEntry(
 
 internal class Searcher
 {
-    public static Dictionary<MonEntry, List<WordEntry>>? DetermineCompatibility(
+    public static Dictionary<MonEntry, WordEntry>? DetermineCompatibility(
         ushort tid,
         ushort sid,
         uint pid,
         GameVersion game)
     {
-        Dictionary<MonEntry, List<WordEntry>> results = new();
+        Dictionary<MonEntry, WordEntry> results = new();
         uint otid = (uint)((sid << 16) | tid);
-        string pidSStruct = MethodPID.pidSStructs[(int)(pid % 24)];
+        uint pidSStruct = pid % 24;
         ushort encryptionKey = (ushort)((otid ^ pid) & 0xFFFF);
-        List<string> compatibleSStructs = new()
-        {
-            MethodPID.pidSStructs[6],
-            MethodPID.pidSStructs[7],
-            MethodPID.pidSStructs[8],
-            MethodPID.pidSStructs[12],
-            MethodPID.pidSStructs[13],
-            MethodPID.pidSStructs[18],
-            MethodPID.pidSStructs[19],
-            MethodPID.pidSStructs[22]
-        };
+        List<uint> compatibleSStructs = [6, 7, 8, 12, 13, 18, 19, 22];
         if (compatibleSStructs.Contains(pidSStruct))
         {
             List<MonEntry> glitchMonList;
@@ -55,13 +45,13 @@ internal class Searcher
             foreach(MonEntry mon in glitchMonList)
             {
                 ushort wordIndex = (ushort)(mon.Index ^ encryptionKey);
-                List<WordEntry> words = EasyChatSystem.ECSWords
-                    .FindAll(entry => entry.Index == wordIndex);
-                if (words.Count <= 0)
+                WordEntry? word = EasyChatSystem.ECSWords
+                    .Find(entry => entry.Index == wordIndex);
+                if (word == null)
                 {
                     continue;
                 }
-                results.Add(mon, words);
+                results.Add(mon, word);
             }
         }
         return results;
