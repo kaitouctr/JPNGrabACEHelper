@@ -38,8 +38,12 @@ class Program
             (int advance, uint pid) in pidGenerator
                                        .Select((x, i) => (i, x)))
         {
+            if (Searcher.CheckPIDSubstructure(pid) == null)
+            {
+                continue;
+            }
             Dictionary<MonEntry, WordEntry>? searcherResults
-                = Searcher.DetermineCompatibility(tid, sid, pid, game);
+                = Searcher.CalculateMonWord(tid, sid, pid, game);
             if (searcherResults == null || !(searcherResults.Count > 0))
             {
                 continue;
@@ -53,7 +57,7 @@ class Program
                 )
             );
         Console.WriteLine(output);
-        Console.Write("Press any key to close this window…");
+        Console.Write("Press any key to close this window. . .");
         Console.ReadKey();
     }
 }

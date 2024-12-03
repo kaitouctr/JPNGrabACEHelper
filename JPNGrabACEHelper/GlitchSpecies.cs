@@ -28,8 +28,7 @@ public class MonEntry(ushort index, uint rawAddress, uint actualAddress, CPUMode
 
 internal class GlitchSpecies
 {
-    public static List<MonEntry> fireRedData = new()
-    {
+    public static MonEntry[] fireRedData = [
         new(0x03F8, 0x021F0046, 0x02030046, CPUMode.ARM, "Box12/21~"),
         new(0x060C, 0x021F0046, 0x02030046, CPUMode.ARM, "Box12/21~"),
         new(0x15BC, 0x020F1404, 0x02031404, CPUMode.ARM, "Box14/24~"),
@@ -84,9 +83,8 @@ internal class GlitchSpecies
         new(0xFFD3, 0x027F027F, 0x0203027F, CPUMode.Thumb, "Box12/28~"),
         new(0xFFF8, 0x027F0000, 0x02030000, CPUMode.ARM, "Box12/20~"),
         new(0xFFF9, 0x027F027F, 0x0203027F, CPUMode.Thumb, "Box12/28~")
-    };
-    public static List<MonEntry> leafGreenData = new()
-    {
+    ];
+    public static MonEntry[] leafGreenData = [
         new(0x03F8, 0x021F0046, 0x02030046, CPUMode.ARM, "Box12/21~"),
         new(0x060C, 0x021F0046, 0x02030046, CPUMode.ARM, "Box12/21~"),
         new(0x15BC, 0x020F1404, 0x02031404, CPUMode.ARM, "Box14/24~"),
@@ -136,5 +134,5 @@ internal class GlitchSpecies
         new(0xFFCE, 0x027F0000, 0x02030000, CPUMode.ARM, "Box12/20~"),
         new(0xFFD1, 0x027F027F, 0x0203027F, CPUMode.Thumb, "Box12/28~"),
         new(0xFFF9, 0x027F027F, 0x0203027F, CPUMode.Thumb, "Box12/28~")
-    };
+    ];
 }

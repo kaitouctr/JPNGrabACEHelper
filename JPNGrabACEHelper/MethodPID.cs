@@ -7,7 +7,7 @@ namespace JPNGrabACEHelper;
 
 internal class MethodPID
 {
-    public static List<string> pidSStructs = new() {
+    public static string[] pidSStructs = [
         "GAEM",
         "GAME",
         "GEAM",
@@ -31,8 +31,8 @@ internal class MethodPID
         "MAGE",
         "MAEG",
         "MEGA",
-        "MEAG"
-    };
+        "MEAG",
+    ];
     public static uint Generate(PokeRNG rng)
     {
         ushort low = rng.Next16();
